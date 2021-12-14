@@ -83,6 +83,7 @@ def get_cube_edges(list_of_cube_coordinates, list_of_cube_point_projection, edge
     return list_of_edges
 
 def perspective_transformation(radius_vector, d):
+    radius_vector = translate(radius_vector, 0, 0, -d)
     transformation_matrix = np.array([[1, 0, 0, 0],
                                     [0, 1, 0, 0],
                                     [0, 0, 1, 0],
@@ -91,9 +92,8 @@ def perspective_transformation(radius_vector, d):
     
     
     result = np.matmul(transformation_matrix, radius_vector.T)
-    print(result, end=" -> ")
+    radius_vector = translate(result, 0, 0, d)
     result /= (z/ d)
-    print(result)
 
    
     return result
@@ -322,9 +322,6 @@ if __name__ == "__main__":
     angle = 0
     da = np.pi / 36
 
-    # cube.draw_perspective(surface, (255, 0, 0), 400)
-    # horizontal_prism.draw_perspective(surface, (255, 0, 0), 400)
-    # vertical_prism.draw_perspective(surface, (255, 0, 0), 400)
     dx = 10
     Tx = 0
     while True:
@@ -346,22 +343,21 @@ if __name__ == "__main__":
 
         pygame.time.wait(100)
         
-        if (Tx < -50 or Tx > 50):
+        if (Tx < -40 or Tx > 40):
             dx *= -1
         
         Tx += dx
+        #vertical_prism.translate(Tx, 0, 0)
+        #vertical_prism.draw_isometric(surface, (255, 0, 0), 1)
+        # vertical_prism.draw_perspective(surface, (255, 0, 0), 400)
 
-        vertical_prism.translate(Tx, 0, 0)
-        vertical_prism.draw_isometric(surface, (255, 0, 0), 1)
-        #vertical_prism.draw_perspective(surface, (255, 0, 0), 400)
+        horizontal_prism.translate(Tx, 0, 0)
+        # horizontal_prism.draw_isometric(surface, (255, 0, 0), 1)
+        horizontal_prism.draw_perspective(surface, (255, 0, 0), 400)
 
-        #horizontal_prism.translate(Tx, 0, 0)
-        #horizontal_prism.draw_isometric(surface, (255, 0, 0), 1)
-        #horizontal_prism.draw_perspective(surface, (255, 0, 0), 400)
-
-        #cube.translate(Tx, 0, 0)
-        #cube.draw_isometric(surface, (0, 255, 0), 1)
-        #cube.draw_perspective(surface, (255, 0, 0), 400)
+        # cube.translate(0, 0, Tx)
+        # # cube.draw_isometric(surface, (0, 255, 0), 1)
+        # cube.draw_perspective(surface, (255, 0, 0), 400)
     
     
 
